@@ -18,21 +18,18 @@
 
 ## 📌 Overview
 
-Defensive phishing email analyzer & header forensics
+OPhishGuard is an offline analyzer for phishing emails. It parses raw .eml/RFC 5322 messages to reconstruct the Received chain, evaluate SPF/DKIM/DMARC authentication, inspect URLs and attachments, and detect lookalike sender domains. Attachments are never executed, opened or written.
 
 ---
 
 ## ✨ Features
 
-- Raw .eml / RFC 5322 parser (stdlib `email`) with header decoding, text/html body extraction and attachment metadata (name, type, size, SHA-256). Attachments are NEVER executed, opened or written.
-- Header forensics — Received chain reconstruction, per-hop timing, originating IP, private/bogon hops, Return-Path / Reply-To / Sender mismatch, Message-ID sanity, Date anomalies (future, stale, bad TZ)
-- Authentication — Authentication-Results, Received-SPF, DKIM-Signature, ARC-* parsing; SPF/DKIM/DMARC verdicts and identifier alignment (relaxed) checks
-- Offline sender reputation — homoglyph skeletons, edit-distance brand lookalikes, punycode / IDN and mixed-script detection, display-name brand spoofing
-- URL analysis — anchor-text vs href mismatch, shorteners, IP literals, userinfo '@', punycode, deep subdomains, suspicious TLDs, data:/javascript: URIs, odd ports. No network access, ever, unless you explicitly ask.
-- Content heuristics — urgency & credential-harvest language, hidden text, mixed charsets, base64 blobs, external form posts, risky / double-extension files
-- Weighted 0–100 phishing score + verdict with per-signal explanation
-- Export TXT / MD / JSON / CSV, save chooser, clipboard
-- Batch directory scan + full CLI (--eml, --dir, --fail-on)
+- Raw .eml/RFC 5322 parsing with header decoding and attachment metadata (name, type, size, SHA-256)
+- Received-chain reconstruction with per-hop timing and originating-IP analysis
+- SPF/DKIM/DMARC and ARC verdicts with identifier-alignment checks
+- Offline lookalike detection via homoglyph, edit-distance and punycode/IDN analysis
+- URL analysis for anchor/href mismatch, shorteners and IP literals
+- Directory scanning, multiple output formats and a CI fail-on gate
 
 ---
 
@@ -46,7 +43,10 @@ Defensive phishing email analyzer & header forensics
 ## 🚀 Usage
 
 ```bash
-./OPhishGuard
+./OPhishGuard --eml suspicious.eml --urls --attachments
+./OPhishGuard --dir ./mailbox --format json -o report.json
+./OPhishGuard --check-domain paypa1.com
+./OPhishGuard --help
 ```
 
 ---
